@@ -1,14 +1,21 @@
-<script src="https://cdn.tailwindcss.com"></script>
-<html>
 <?php 
-//require_once "conf/config.php";
-//include 'controller/sign-up.php'
-
+require_once("controller/UserController.php");
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: index.php");
     exit;
 }
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $userController = new UserController();
+
+    try {
+        $userController->LoginUser($_POST["username"], $_POST["password"]);
+    } catch (Exception $ex) {
+        echo "<script>console.log('error');</script>";
+    }
+}
 ?>
+<html>
+<script src="https://cdn.tailwindcss.com"></script>
 
 <body>
     <div class="">
