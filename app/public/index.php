@@ -1,12 +1,18 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <html>
-<?php $feed = [(object)["title" => "Tosti", "img" => "https://soulfood.nl/wp-content/uploads/2021/01/tosti.jpg", "desc" => "Dit is een test.", "likes" => 12, "account" => (object)["id" => 1, "name" => "Bert"]], (object)["title" => "Broodje", "img" => "https://soulfood.nl/wp-content/uploads/2021/01/tosti.jpg", "desc" => "Dit is een test.", "likes" => 12, "account" => (object)["id" => 1, "name" => "Bert"]]] ?>
+<?php 
+
+
+$feed = [(object)["title" => "Tosti", "img" => "https://soulfood.nl/wp-content/uploads/2021/01/tosti.jpg", "desc" => "Dit is een test.", "likes" => 12, "account" => (object)["id" => 1, "name" => "Bert"]], (object)["title" => "Broodje", "img" => "https://soulfood.nl/wp-content/uploads/2021/01/tosti.jpg", "desc" => "Dit is een test.", "likes" => 12, "account" => (object)["id" => 1, "name" => "Bert"]]] 
+
+?>
 
 <body>
     <div class="min-h-screen">
         <?php include 'components/nav.php' ?>
+
         <div class="flex justify-center mt-32">
-            <div class="max-w-xl">
+            <div class="w-full px-2 sm:px-0 sm:max-w-xl">
                 <?php foreach($feed as $item) : ?>
                 <div class="bg-gray-100 rounded-lg overflow-hidden relative mb-12">
                     <div class="absolute top-0 left-0 w-full p-2 pb-4 bg-gradient-to-b from-gray-800 to-transparent">

@@ -1,8 +1,80 @@
-<script src="https://cdn.tailwindcss.com"></script>
-<html>
 <?php 
-//require_once "conf/config.php";
-//include 'controller/sign-up.php' ?>
+require_once "conf/config.php";
+
+try {
+    $connection = new PDO("mysql:host=$servername;dbname=$databasename",$username, $password);
+    $connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+}
+
+//include 'controller/sign-up.php'
+
+$username = $password = "";
+$username_err = $password_err = "";
+ 
+// Processing form data when form is submitted
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // Validate username
+    if(empty(trim($_POST["username"]))){
+        $username_err = "Please enter a username.";
+    } elseif(!preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST["username"]))){
+        $username_err = "Username can only contain letters, numbers, and underscores.";
+    } else{
+        // Prepare a select statement
+        if($stmt = $connection->prepare("SELECT id FROM users WHERE username = :username")){
+            // Bind variables to the prepared statement as parameters
+            $username_param = trim(htmlspecialchars($_POST["username"]));
+            $stmt->bindParam(':username', $username_param);            
+            // Set parameters
+            // Attempt to execute the prepared statement
+            try{
+                if($stmt->fetchColumn() > 1){
+                    $username_err = "This username is already taken.";
+                } else{
+                    $username = trim($_POST["username"]);
+                }
+            } catch (Exception $ex) {
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+        }
+    }
+    
+    // Validate password
+    if(empty(trim($_POST["password"]))){
+        $password_err = "Please enter a password.";     
+    } elseif(strlen(trim($_POST["password"])) < 6){
+        $password_err = "Password must have atleast 6 characters.";
+    } else{
+        $password = trim($_POST["password"]);
+    }
+    
+    // Check input errors before inserting in database
+    if(empty($username_err) && empty($password_err)){
+        if($stmt = $connection->prepare("INSERT INTO users (username, password) VALUES (:username, :password)")){
+            // Bind variables to the prepared statement as parameters
+            $username_param = trim(htmlspecialchars($_POST["username"]));
+            $password_param = password_hash(trim(htmlspecialchars($_POST["password"])),PASSWORD_DEFAULT);
+            
+            $stmt->bindParam(':username', $username_param);            
+            $stmt->bindParam(':password', $password_param);            
+            
+            // Attempt to execute the prepared statement
+            if($stmt->execute()){
+                // Redirect to login page
+                header("location: login.php");
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+
+        }
+    }
+} 
+else { ?>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<html>
 
 <body>
     <div class="">
@@ -40,8 +112,6 @@
                                     class="font-medium text-primary-600 hover:underline dark:text-primary-500">Login
                                     here</a>
                             </p>
-                            <?php echo "$username_err" ?>
-                            <?php echo "$password_err" ?>
                         </form>
                     </div>
                 </div>
@@ -51,3 +121,6 @@
 </body>
 
 </html>
+}
+<?php }
+?>

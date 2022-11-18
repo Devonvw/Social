@@ -2,7 +2,13 @@
 <html>
 <?php 
 //require_once "conf/config.php";
-//include 'controller/sign-up.php' ?>
+//include 'controller/sign-up.php'
+
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    header("location: index.php");
+    exit;
+}
+?>
 
 <body>
     <div class="">

@@ -1,6 +1,5 @@
 <?php
 // Include config file
-
  
 // Define variables and initialize with empty values
 $username = $password = "";
@@ -15,31 +14,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username_err = "Username can only contain letters, numbers, and underscores.";
     } else{
         // Prepare a select statement
-        $sql = "SELECT id FROM users WHERE username = ?";
-        
-        if($stmt = mysqli_prepare($link, $sql)){
+        if($stmt = $connection->prepare("SELECT id FROM users WHERE username = :username")){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_username);
-            
+            $stmt->bindParam(':username', trim(htmlspecialchars($_POST["username"])));            
             // Set parameters
-            $param_username = trim($_POST["username"]);
-            
             // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                /* store result */
-                mysqli_stmt_store_result($stmt);
-                
-                if(mysqli_stmt_num_rows($stmt) == 1){
+            try{
+                if($stmt->fetchColumn() > 1){
                     $username_err = "This username is already taken.";
                 } else{
                     $username = trim($_POST["username"]);
                 }
-            } else{
+            } catch (Exception $ex) {
                 echo "Oops! Something went wrong. Please try again later.";
             }
-
-            // Close statement
-            mysqli_stmt_close($stmt);
         }
     }
     
@@ -54,32 +42,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     // Check input errors before inserting in database
     if(empty($username_err) && empty($password_err)){
-        
-        // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-         
-        if($stmt = mysqli_prepare($link, $sql)){
+        if($stmt = $connection->prepare("INSERT INTO users (username, password) VALUES (:username, :password)")){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
-            
-            // Set parameters
-            $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
+            $stmt->bindParam(':username', trim(htmlspecialchars($_POST["username"])));            
+            $stmt->bindParam(':password', password_hash(trim(htmlspecialchars($_POST["password"])),PASSWORD_DEFAULT));            
             
             // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
+            if($stmt->execute()){
                 // Redirect to login page
                 header("location: login.php");
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
 
-            // Close statement
-            mysqli_stmt_close($stmt);
         }
     }
-    
-    // Close connection
-    mysqli_close($link);
 }
 ?>
