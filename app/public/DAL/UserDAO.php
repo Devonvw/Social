@@ -9,6 +9,11 @@ require_once("DAL/Database.php");
          $this->DB = new DB();
        }
 
+       function LogoutUser() {
+          if (isset($_SESSION["loggedin"]))
+            session_destroy();
+       }
+
        function LoginUser($username, $password) {
         if(empty(trim($username))){
             throw new Exception("Please enter a username.");
@@ -31,7 +36,6 @@ require_once("DAL/Database.php");
                 header("location: index.php");
             } else throw new Exception("Password is not correct");
         } catch (Exception $ex) {
-            echo "$ex";
             throw new Exception($ex);
         }
        }
