@@ -1,5 +1,8 @@
 <?php 
 include 'components/handleLogin.php';
+require_once("controller/FeedController.php");
+
+$feedContoller = new FeedController();
 
 $feed = [(object)["title" => "Tosti", "img" => "https://soulfood.nl/wp-content/uploads/2021/01/tosti.jpg", "desc" => "Dit is een test.", "likes" => 12, "account" => (object)["id" => 1, "name" => "Bert"]], (object)["title" => "Broodje", "img" => "https://soulfood.nl/wp-content/uploads/2021/01/tosti.jpg", "desc" => "Dit is een test.", "likes" => 12, "account" => (object)["id" => 1, "name" => "Bert"]]] 
 

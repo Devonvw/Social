@@ -27,13 +27,15 @@ require_once("DAL/Database.php");
             $user = $stmt->fetchObject("User");
 
             if(password_verify($password, $user->password)){
+                // Redirect user to welcome page
+                header("location: index.php");
+                
                 session_start();
                 $_SESSION["loggedin"] = true;
                 $_SESSION["id"] = $user->id;
                 $_SESSION["username"] = $user->username;                            
                 
-                // Redirect user to welcome page
-                header("location: index.php");
+                
             } else throw new Exception("Password is not correct");
         } catch (Exception $ex) {
             throw new Exception($ex);
