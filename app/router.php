@@ -41,6 +41,12 @@ class Router {
                         $controller = new APIUserController();
                         $controller->logout();
                         break;
+                    case "feed/new-post":
+                        session_start();
+                        require_once __DIR__ . '/api/controller/feedController.php';
+                        $controller = new APIFeedController();
+                        $controller->createNewPost();
+                        break;
                     default:
                         http_response_code(404);
                         break;
@@ -72,6 +78,11 @@ class Router {
                         require_once __DIR__ . '/controller/userController.php';
                         $controller = new UserController();
                         $controller->signUp();
+                        break;
+                    case 'new-post': 
+                        require __DIR__ . '/controller/feedController.php';
+                        $controller = new FeedController();
+                        $controller->newPost();
                         break;
                     default:
                         http_response_code(404);

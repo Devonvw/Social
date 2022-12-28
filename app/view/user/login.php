@@ -18,7 +18,7 @@ function login() {
             password: document.getElementById('password').value
         })
     }).then(async (res) => {
-        const data = await res.json();
+        //const data = await res.json();
         window.location = "http://localhost";
     }).catch((res) => console.log("error", res));
 }
@@ -28,7 +28,6 @@ function login() {
     <div class="">
         <?php include __DIR__ . '/../../components/nav.php' ?>
         <div class="h-[80vh] flex justify-center items-center mt-32">
-            <?php var_dump($_SESSION) ?>
             <div class="max-w-xl">
                 <div
                     class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-xl xl:p-0 dark:bg-teal-800 dark:border-gray-700">

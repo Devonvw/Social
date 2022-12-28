@@ -20,5 +20,9 @@ class FeedController extends Controller {
         // displayView maps this to /views/article/index.php automatically
         $this->displayView($feed);
     }
+
+    public function newPost() {
+      $this->displayView("");
+  }
 }
 ?>

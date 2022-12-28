@@ -7,17 +7,17 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 <html>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-function login() {
+function signUp() {
     fetch('http://localhost/api/user/sign-up', {
         headers: {
             'Content-Type': 'application/json'
         },
+        method: "POST",
         body: JSON.stringify({
             username: document.getElementById('username').value,
             password: document.getElementById('password').value
         })
     }).then(async (res) => {
-        const data = await res.json();
         window.location = "http://localhost/login";
     }).catch((res) => console.log("error", res));
 }
@@ -54,11 +54,11 @@ function login() {
                                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     required="">
                             </div>
-                            <button type="submit"
+                            <button type="button" onclick="signUp()"
                                 class="w-full text-white border border-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
                                 an account</button>
                             <p class="text-sm font-light text-gray-100">
-                                Already have an account? <a href="login.php"
+                                Already have an account? <a href="/login"
                                     class="font-medium text-primary-600 hover:underline dark:text-primary-500">Login
                                     here</a>
                             </p>

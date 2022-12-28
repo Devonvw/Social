@@ -9,6 +9,11 @@ class FeedService {
 
         return $feed;
     }
+
+    public function CreateNewPost($title, $imgUrl, $description) {
+        $dao = new FeedDAO();
+        $dao->CreateNewPost($title, $imgUrl, $description);
+    }
 }
 
 ?>
