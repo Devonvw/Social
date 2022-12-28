@@ -7,7 +7,7 @@ class User {
   public $password;
 
   function __construct($id = null, $username = null, $password = null) {
-    if(!is_null($id) && !is_null($username) && !is_null($password)) {
+    if(!is_null($id) && !is_null($username)) {
       $this->id = $id;
       $this->username = $username;
       $this->password = $password;

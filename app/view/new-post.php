@@ -1,6 +1,3 @@
-<?php 
-include 'components/handleLogin.php';
-?>
 <script src="https://cdn.tailwindcss.com"></script>
 <html>
 

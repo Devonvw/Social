@@ -1,28 +1,33 @@
-<?php
-include 'components/handleLogin.php';
-
- require_once("controller/UserController.php");
- if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-     header("location: index.php");
-     exit;
- }
- if ($_SERVER["REQUEST_METHOD"] == "POST") {
-     $userController = new UserController();
- 
-     try {
-         $userController->CreateUser($_POST["username"], $_POST["password"]);
-     } catch (Exception $ex) {
-         echo "<script>console.log('error');</script>";
-     }
- }
-else { ?>
+<?php 
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    header("location: /");
+    exit;
+}
+?>
+<html>
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+function login() {
+    fetch('http://localhost/api/user/sign-up', {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+        })
+    }).then(async (res) => {
+        const data = await res.json();
+        window.location = "http://localhost/login";
+    }).catch((res) => console.log("error", res));
+}
+</script>
 
 <html>
 
 <body>
     <div class="">
-        <?php include 'components/nav.php' ?>
+        <?php include __DIR__ . '/../../components/nav.php' ?>
         <div class="h-[80vh] flex justify-center items-center mt-32">
             <div class="max-w-xl">
                 <div
@@ -66,6 +71,3 @@ else { ?>
 </body>
 
 </html>
-}
-<?php }
-?>

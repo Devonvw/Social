@@ -1,6 +1,6 @@
 <?php 
-require_once("model/User.php");
-require_once("DAL/Database.php");
+require_once __DIR__ . '/../model/User.php';
+require_once __DIR__ . '/../DAL/Database.php';
 
     class UserDAO {
        public $DB;
@@ -10,8 +10,9 @@ require_once("DAL/Database.php");
        }
 
        function LogoutUser() {
-          if (isset($_SESSION["loggedin"]))
+          if (isset($_SESSION["loggedin"])){
             session_destroy();
+          }
        }
 
        function LoginUser($username, $password) {
@@ -27,15 +28,15 @@ require_once("DAL/Database.php");
             $user = $stmt->fetchObject("User");
 
             if(password_verify($password, $user->password)){
-                // Redirect user to welcome page
-                header("location: index.php");
-                
-                session_start();
+
                 $_SESSION["loggedin"] = true;
                 $_SESSION["id"] = $user->id;
-                $_SESSION["username"] = $user->username;                            
-                
-                
+                $_SESSION["username"] = $user->username;  
+
+                session_write_close();
+                //header('Location: http://localhost');
+                //die();
+                //exit;
             } else throw new Exception("Password is not correct");
         } catch (Exception $ex) {
             throw new Exception($ex);
