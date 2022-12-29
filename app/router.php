@@ -47,6 +47,12 @@ class Router {
                         $controller = new APIFeedController();
                         $controller->createNewPost();
                         break;
+                    case "feed/like-unlike-post":
+                        session_start();
+                        require_once __DIR__ . '/api/controller/feedController.php';
+                        $controller = new APIFeedController();
+                        $controller->likeUnlikePost();
+                        break;
                     default:
                         http_response_code(404);
                         break;
@@ -80,6 +86,7 @@ class Router {
                         $controller->signUp();
                         break;
                     case 'new-post': 
+                        session_start();
                         require __DIR__ . '/controller/feedController.php';
                         $controller = new FeedController();
                         $controller->newPost();

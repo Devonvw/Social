@@ -18,6 +18,8 @@ require_once __DIR__ . '/../DAL/Database.php';
             $stmt = $this->DB::$connection->prepare("SELECT posts.*, users.id as user_id, users.username, counter.likes, CASE WHEN post_likes_account.post_id THEN true else false END as liked FROM posts left join users on users.id = posts.account_id left join (SELECT * FROM post_likes WHERE account_id = :account_id) as post_likes_account on post_likes_account.post_id = posts.id left join (SELECT COUNT(post_id) as likes, post_id FROM post_likes GROUP BY post_id) as counter on counter.post_id = posts.id ORDER BY posts.created_at DESC;");
             $account_id_param = isset($_SESSION["id"]) ? $_SESSION["id"] : 0;
 
+            echo($account_id_param);
+
             $stmt->bindValue(':account_id', $account_id_param, PDO::PARAM_INT);
             $stmt->execute();
             $data = $stmt->fetchAll();
@@ -61,21 +63,21 @@ require_once __DIR__ . '/../DAL/Database.php';
         }
       }
 
-        function LikeUnlikePost($postId, $loading) {
+        function LikeUnlikePost($postId) {
           try{
-              $loading = true;
               session_start();
-  
-              if (!isset($_SESSION["id"])) throw new Exception("Not logged in");
 
-              $account_id_param = $_SESSION["id"];
+              if (!isset($_SESSION["id"])) return;
 
-              $select_stmt = $this->DB::$connection->prepare("SELECT post_likes WHERE post_id = :post_id AND WHERE account_id = :account_id");
+              $account_id_param = isset($_SESSION["id"]) ? $_SESSION["id"] : 0;
+
+              $select_stmt = $this->DB::$connection->prepare("SELECT * FROM post_likes WHERE post_id = :post_id AND account_id = :account_id");
               $select_stmt->bindValue(':post_id', $postId, PDO::PARAM_INT);
               $select_stmt->bindValue(':account_id', $account_id_param, PDO::PARAM_INT);
 
-              if($select_stmt->fetchColumn() > 1){
-                $del_stmt = $this->DB::$connection->prepare("DELETE FROM post_likes WHERE post_id = :post_id AND WHERE account_id = :account_id");
+              $select_stmt->execute();
+              if($select_stmt->fetchColumn() > 0){
+                $del_stmt = $this->DB::$connection->prepare("DELETE FROM post_likes WHERE post_id = :post_id AND account_id = :account_id");
                 $del_stmt->bindValue(':post_id', $postId, PDO::PARAM_INT);
                 $del_stmt->bindValue(':account_id', $account_id_param, PDO::PARAM_INT);
                 $del_stmt->execute();
@@ -86,7 +88,6 @@ require_once __DIR__ . '/../DAL/Database.php';
                 $insert_stmt->execute();
               }
 
-              $loading = false;
           } catch (Exception $ex) {
               echo "$ex";
               throw new Exception($ex);
