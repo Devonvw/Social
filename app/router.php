@@ -42,7 +42,6 @@ class Router {
                         $controller->logout();
                         break;
                     case "feed/new-post":
-                        session_start();
                         require_once __DIR__ . '/api/controller/feedController.php';
                         $controller = new APIFeedController();
                         $controller->createNewPost();

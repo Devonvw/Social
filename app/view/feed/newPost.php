@@ -19,9 +19,16 @@ function createNewPost() {
             description: document.getElementById('description').value
         })
     }).then(async (res) => {
-        //const data = await res.json();
-        window.location = "http://localhost";
-    }).catch((res) => console.log("error", res));
+        if (res.ok) {
+            window.location = "http://localhost";
+        } else {
+            document.getElementById('error').innerHTML = res.statusText;
+            document.getElementById('errorWrapper').classList.remove('hidden');
+        }
+    }).catch((res) => {
+        console.log("faulty");
+        console.log("error", res);
+    })
 }
 </script>
 
@@ -31,31 +38,40 @@ function createNewPost() {
         <div class="h-[80vh] flex justify-center items-center mt-32">
             <div class="max-w-xl">
                 <div
-                    class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-xl xl:p-0 dark:bg-teal-800 dark:border-gray-700">
+                    class="w-80 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-xl xl:p-0 dark:bg-teal-800 dark:border-gray-700">
                     <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                         <h1
                             class="text-2xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                             Create a post
                         </h1>
+                        <div class="bg-red-200 p-2 w-full rounded-lg flex text-red-700 items-center text-sm hidden"
+                            id="errorWrapper"><svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3"
+                                fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <p id="error"></p>
+                        </div>
                         <div>
                             <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                 Title</label>
                             <input maxlength="255" type="text" name="title" id="title"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-80 p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="..." required="">
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Title..." required="">
                         </div>
                         <div>
                             <label for="imgUrl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                 Image url</label>
                             <input type="text" name="imgUrl" id="imgUrl"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="..." required="">
+                                placeholder="Image url..." required="">
                         </div>
                         <div>
                             <label for="description"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                 Description</label>
-                            <textarea id="description" rows="4"
+                            <textarea id="description" rows="4" maxlength="500"
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Description..."></textarea>
                         </div>
