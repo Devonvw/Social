@@ -12,7 +12,7 @@ require_once __DIR__ . '/../DAL/Database.php';
        }
 
        function GetFeed() {
-          $stmt = $this->DB::$connection->prepare("SELECT posts.*, users.id as user_id, users.username, counter.likes, CASE WHEN post_likes_account.post_id THEN true else false END as liked FROM posts left join users on users.id = posts.account_id left join (SELECT * FROM post_likes WHERE account_id = :account_id) as post_likes_account on post_likes_account.post_id = posts.id left join (SELECT COUNT(post_id) as likes, post_id FROM post_likes GROUP BY post_id) as counter on counter.post_id = posts.id ORDER BY posts.created_at DESC;");
+          $stmt = $this->DB::$connection->prepare("SELECT posts.*, users.id as user_id, users.username, counter.likes, CASE WHEN post_likes_account.post_id THEN true else false END as liked, pco.comments FROM posts left join users on users.id = posts.account_id left join (SELECT * FROM post_likes WHERE account_id = :account_id) as post_likes_account on post_likes_account.post_id = posts.id left join (SELECT COUNT(post_id) as likes, post_id FROM post_likes GROUP BY post_id) as counter on counter.post_id = posts.id left join (select posts.id, JSON_ARRAYAGG(create_objects.object) as comments from posts left join (select post_id, JSON_MERGE(JSON_OBJECTAGG('username', users.username), JSON_OBJECTAGG('comment', post_comment.comment)) as object from post_comment left join users on users.id = post_comment.account_id group by post_comment.account_id) as create_objects on posts.id = create_objects.post_id group by posts.id) as pco on pco.id = posts.id ORDER BY posts.created_at DESC;");
           $account_id_param = isset($_SESSION["id"]) ? $_SESSION["id"] : 0;
 
           $stmt->bindValue(':account_id', $account_id_param, PDO::PARAM_INT);
@@ -22,8 +22,10 @@ require_once __DIR__ . '/../DAL/Database.php';
           $posts = [];
 
           foreach ($data as $row) {
-            array_push($posts, new Post($row['id'], $row['title'], $row['image_url'], $row['description'], $row['likes'], $row['liked'], $row['created_at'], new User($row['id'], $row['username'])));
+            array_push($posts, new Post($row['id'], $row['title'], $row['image_url'], $row['description'], $row['likes'], $row['liked'], $row['created_at'], json_decode($row['comments']), new User($row['id'], $row['username'])));
           }
+
+          var_dump($posts);
 
           return $posts;
         }

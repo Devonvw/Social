@@ -48,7 +48,18 @@ function likeUnlikePost(postId) {
                             </div>
                             <h2 class="text-teal-800 font-bold text-xl"><?= $item->title ?></h2>
                             <p><?= $item->description ?></p>
+
                         </div>
+                        <?php if ($item->comments[0]) : ?>
+                        <div class="border-t border-gray-400 px-4 py-1 text-sm">
+                            <h6 class="text-base">Comments</h6>
+                            <?php foreach(($item->comments[0] ? $item->comments : array()) as $comment) : ?>
+                            <p><?= $comment->username ?></p>
+                            <p><?= $comment->comment ?></p>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+
                         <p class="border-t border-gray-400 text-sm px-4 py-1">
                             <?= date("d-m-Y", strtotime($item->created_at)) ?></p>
                     </div>
