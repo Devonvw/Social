@@ -11,6 +11,10 @@ class APIFeedController
         $this->feedService = new FeedService();
     }
 
+    public function getFeed()
+    {
+        echo json_encode($this->feedService->GetFeed());
+    }
     public function createNewPost()
     {
         $body = json_decode(file_get_contents('php://input'), true);
@@ -20,6 +24,11 @@ class APIFeedController
     {
         $body = json_decode(file_get_contents('php://input'), true);
         $this->feedService->likeUnlikePost($body["post_id"]);
+    }
+    public function addComment()
+    {
+        $body = json_decode(file_get_contents('php://input'), true);
+        $this->feedService->addComment($body["comment"], $body["post_id"]);
     }
 }
 ?>

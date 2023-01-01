@@ -32,6 +32,16 @@ class FeedService {
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
+    public function AddComment($comment, $postId) {
+        try {
+            $dao = new FeedDAO();
+            $dao->AddComment($comment, $postId);
+        } catch (Exception $ex){
+            if($ex->getCode() == 0) 
+                echo header("HTTP/1.1 500 Something went wrong.");
+            else echo header("HTTP/1.1 500 ".$ex->getMessage());
+        }
+    }
 }
 
 ?>

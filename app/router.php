@@ -16,6 +16,12 @@ class Router {
         switch($requestMethod) {
             case 'GET':
                 switch($uri) {
+                    case "feed":
+                        session_start();
+                        require_once __DIR__ . '/api/controller/feedController.php';
+                        $controller = new APIFeedController();
+                        $controller->getFeed();
+                        break;
                     default:
                         http_response_code(404);
                         break;
@@ -51,6 +57,11 @@ class Router {
                         require_once __DIR__ . '/api/controller/feedController.php';
                         $controller = new APIFeedController();
                         $controller->likeUnlikePost();
+                        break;
+                    case "feed/add-comment":
+                        require_once __DIR__ . '/api/controller/feedController.php';
+                        $controller = new APIFeedController();
+                        $controller->addComment();
                         break;
                     default:
                         http_response_code(404);
