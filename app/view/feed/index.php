@@ -13,7 +13,7 @@ function likeUnlikePost(postId) {
             post_id: postId?.id,
         })
     }).then(async (res) => {
-        window.location.reload();
+        getFeed();
     }).catch((res) => console.log("error", res));
 }
 
@@ -25,11 +25,11 @@ function getFeed() {
         method: "GET",
     }).then(async (res) => {
         if (res.ok) {
-            const data = res.json();
+            const data = await res.json();
 
             var feedHTML = "";
 
-            data?.feed.forEach((post => feedHTML += `<div class="bg-teal-600/10 rounded-lg overflow-hidden relative mb-12 shadow-md">
+            data?.forEach((post => feedHTML += `<div class="bg-teal-600/10 rounded-lg overflow-hidden relative mb-12 shadow-md">
                     <div class="absolute top-0 left-0 w-full p-2 pb-4 bg-gradient-to-b from-gray-800 to-transparent">
                         <h2 class="text-white font-extrabold text-2xl">${post.user.username}</h2>
                     </div>
@@ -38,7 +38,7 @@ function getFeed() {
                     <div class="relative">
                         <div class="p-4">
                             <div class="flex items-center justify-center absolute top-2 right-2">
-                                <p class="text-teal-800 mr-1"><${post.likes}</p><button id="${post.id}"
+                                <p class="text-teal-800 mr-1">${post.likes}</p><button id="${post.id}"
                                     class="w-6 h-6 " onclick="likeUnlikePost(this)"><svg
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor"
@@ -53,16 +53,16 @@ function getFeed() {
                         </div>
                         <div class="border-t border-gray-400 px-4 py-1 text-sm">
                             <h6 class="text-base font-semibold">
-                                ${post.comments[0] ? item.comments.length : 0} comments
+                                ${post.comments[0] ? post.comments.length : 0} comments
                             </h6>
                             <div class=" max-h-20 overflow-y-scroll">
-                                ${post.comments[0] && `<div class="mt-1">
+                                ${post.comments[0] ? `<div class="mt-1">
                                     ${post.comments?.map((comment) => 
                                         `<div class="flex gap-x-2">
                                             <p class="font-medium">${comment.username}: </p>
                                             <p>${comment.comment}</p>
-                                        </div>`)}
-                                </div>`}
+                                        </div>`).join('')}
+                                </div>` : ''}
                             </div>
                             <div class="flex items-center gap-x-2 mt-2"><input maxlength="255" type="text"
                                     name="comment${post.id}" id="comment${post.id}"
@@ -76,12 +76,10 @@ function getFeed() {
                                     </svg></button></div>
                         </div>
 
-                        <p class="border-t border-gray-400 text-sm px-4 py-1">
+                        <p class="border-t border-gray-400 text-xs px-4 py-1">
                             ${new Date(post.created_at).toLocaleDateString()}</p>
                     </div>
                 </div>`))
-
-            con
 
             document.getElementById("posts").innerHTML = feedHTML;
         }
@@ -99,7 +97,7 @@ function addComment(postId) {
             post_id: postId?.id,
         })
     }).then(async (res) => {
-        window.location.reload();
+        getFeed();
     }).catch((res) => console.log("error", res));
 }
 </script>
