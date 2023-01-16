@@ -20,6 +20,11 @@ class APIFeedController
         $body = json_decode(file_get_contents('php://input'), true);
         $this->feedService->CreateNewPost($body["title"], $body["image_url"], $body["description"]);
     }
+    public function deletePost()
+    {
+        $body = json_decode(file_get_contents('php://input'), true);
+        $this->feedService->DeletePost($body["post_id"]);
+    }
     public function likeUnlikePost()
     {
         $body = json_decode(file_get_contents('php://input'), true);

@@ -22,6 +22,16 @@ class FeedService {
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
+    public function DeletePost($id) {
+        try {
+            $dao = new FeedDAO();
+            $dao->DeletePost($id);
+        } catch (Exception $ex){
+            if($ex->getCode() == 0) 
+                echo header("HTTP/1.1 500 Something went wrong.");
+            else echo header("HTTP/1.1 500 ".$ex->getMessage());
+        }
+    }
     public function LikeUnlikePost($postId) {
         try {
             $dao = new FeedDAO();

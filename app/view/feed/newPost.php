@@ -8,7 +8,7 @@ if(!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true)){
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 function createNewPost() {
-    fetch('http://localhost/api/feed/new-post', {
+    fetch(`${window.location.origin}/api/feed/new-post`, {
         headers: {
             'Content-Type': 'application/json'
         },
@@ -20,7 +20,7 @@ function createNewPost() {
         })
     }).then(async (res) => {
         if (res.ok) {
-            window.location = "http://localhost";
+            window.location = "/";
         } else {
             document.getElementById('error').innerHTML = res.statusText;
             document.getElementById('errorWrapper').classList.remove('hidden');

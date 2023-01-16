@@ -8,7 +8,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 function signUp() {
-    fetch('http://localhost/api/user/sign-up', {
+    fetch(`${window.location.origin}/api/user/sign-up`, {
         headers: {
             'Content-Type': 'application/json'
         },
@@ -19,7 +19,7 @@ function signUp() {
         })
     }).then(async (res) => {
         if (res.ok) {
-            window.location = "http://localhost/login";
+            window.location = "/login";
         } else {
             document.getElementById('error').innerHTML = res.statusText;
             document.getElementById('errorWrapper').classList.remove('hidden');

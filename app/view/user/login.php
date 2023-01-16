@@ -8,18 +8,19 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 function login() {
-    fetch('http://localhost/api/user/login', {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({
-            username: document.getElementById('username').value,
-            password: document.getElementById('password').value
-        })
-    }).then(async (res) => {
+    fetch(
+        `${window.location.origin}/api/user/login`, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            })
+        }).then(async (res) => {
         if (res.ok) {
-            window.location = "http://localhost";
+            window.location = "/";
         } else {
             document.getElementById('error').innerHTML = res.statusText;
             document.getElementById('errorWrapper').classList.remove('hidden');
