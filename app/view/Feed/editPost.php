@@ -1,5 +1,5 @@
 <?php 
-if(!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true)){
+if((!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true)) || !isset($_GET['id'])){
     header("location: /");
     exit;
 }
@@ -7,20 +7,46 @@ if(!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true)){
 <html>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-function createNewPost() {
+window.onload = getPost();
+
+function getPost() {
+    const params = new URLSearchParams(window.location.search)
+    fetch(`${window.location.origin}/api/feed/post?id=${params.get("id")}`, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method: "GET",
+    }).then(async (res) => {
+        if (!res.ok) {
+            window.location = "/my-posts";
+        }
+        const post = await res.json();
+        document.getElementById('title').value = post?.title;
+        document.getElementById('imgUrl').value = post?.image_url;
+        document.getElementById('description').value = post?.description;
+    }).catch((res) => {
+        console.log("faulty");
+        console.log("error", res);
+    })
+}
+
+function editPost() {
+    const params = new URLSearchParams(window.location.search)
+
     fetch(`${window.location.origin}/api/feed`, {
         headers: {
             'Content-Type': 'application/json'
         },
-        method: "POST",
+        method: "PUT",
         body: JSON.stringify({
+            post_id: params.get("id"),
             title: document.getElementById('title').value,
             image_url: document.getElementById('imgUrl').value,
             description: document.getElementById('description').value
         })
     }).then(async (res) => {
         if (res.ok) {
-            window.location = "/";
+            window.location = "/my-posts";
         } else {
             document.getElementById('error').innerHTML = res.statusText;
             document.getElementById('errorWrapper').classList.remove('hidden');
@@ -75,9 +101,9 @@ function createNewPost() {
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Description..."></textarea>
                         </div>
-                        <button type="button" onclick="createNewPost()"
-                            class="border border-white w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
-                            post
+                        <button type="button" onclick="editPost()"
+                            class="border border-white w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                            Save
                         </button>
                     </div>
                 </div>

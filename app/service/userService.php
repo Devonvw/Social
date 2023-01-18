@@ -34,5 +34,16 @@ class UserService {
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
+
+    public function GetMyPosts() {
+        try {
+            $dao = new UserDAO();
+            return $dao->GetMyPosts();
+        } catch (Exception $ex){
+            if($ex->getCode() == 0) 
+                echo header("HTTP/1.1 500 Something went wrong.");
+            else echo header("HTTP/1.1 500 ".$ex->getMessage());
+        }
+    }
 }
 ?>

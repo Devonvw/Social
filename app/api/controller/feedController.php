@@ -15,10 +15,19 @@ class APIFeedController
     {
         echo json_encode($this->feedService->GetFeed());
     }
+    public function getPost($post_id)
+    {
+        echo json_encode($this->feedService->GetPost($post_id));
+    }
     public function createNewPost()
     {
         $body = json_decode(file_get_contents('php://input'), true);
         $this->feedService->CreateNewPost($body["title"], $body["image_url"], $body["description"]);
+    }
+    public function editPost()
+    {
+        $body = json_decode(file_get_contents('php://input'), true);
+        $this->feedService->EditPost($body["post_id"], $body["title"], $body["image_url"], $body["description"]);
     }
     public function deletePost()
     {

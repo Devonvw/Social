@@ -12,10 +12,30 @@ class FeedService {
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
+    public function GetPost($post_id) {
+        try {
+            $dao = new FeedDAO();
+            return $dao->GetPost($post_id);
+        } catch (Exception $ex){
+            if($ex->getCode() == 0) 
+                echo header("HTTP/1.1 500 Something went wrong.");
+            else echo header("HTTP/1.1 500 ".$ex->getMessage());
+        }
+    }
     public function CreateNewPost($title, $imgUrl, $description) {
         try {
             $dao = new FeedDAO();
             $dao->CreateNewPost($title, $imgUrl, $description);
+        } catch (Exception $ex){
+            if($ex->getCode() == 0) 
+                echo header("HTTP/1.1 500 Something went wrong.");
+            else echo header("HTTP/1.1 500 ".$ex->getMessage());
+        }
+    }
+    public function EditPost($post_id, $title, $imgUrl, $description) {
+        try {
+            $dao = new FeedDAO();
+            return $dao->EditPost($post_id, $title, $imgUrl, $description);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");

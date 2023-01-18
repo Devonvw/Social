@@ -1,5 +1,6 @@
 <?php 
 require_once __DIR__ . '/../model/User.php';
+require_once __DIR__ . '/../model/Post.php';
 require_once __DIR__ . '/../DAL/Database.php';
 
     class UserDAO {
@@ -77,5 +78,22 @@ require_once __DIR__ . '/../DAL/Database.php';
             $stmt->execute();
         }
        }
+
+       function GetMyPosts() {
+        $stmt = $this->DB::$connection->prepare("SELECT posts.*, users.id as user_id, users.username, counter.likes, CASE WHEN post_likes_account.post_id THEN true else false END as liked, pco.comments FROM posts left join users on users.id = posts.account_id left join (SELECT * FROM post_likes WHERE account_id = :account_id) as post_likes_account on post_likes_account.post_id = posts.id left join (SELECT COUNT(post_id) as likes, post_id FROM post_likes GROUP BY post_id) as counter on counter.post_id = posts.id left join (select posts.id, replace(replace(JSON_ARRAYAGG(create_objects.object), '}\"', '}'), '\"{', '{') as comments from posts left join (select post_id, JSON_MERGE(JSON_OBJECTAGG('username', users.username), JSON_OBJECTAGG('comment', post_comment.comment)) as object from post_comment left join users on users.id = post_comment.account_id group by post_comment.id) as create_objects on posts.id = create_objects.post_id group by posts.id) as pco on pco.id = posts.id where users.id = :account_id ORDER BY posts.created_at DESC;");
+        $account_id_param = isset($_SESSION["id"]) ? $_SESSION["id"] : 0;
+
+        $stmt->bindValue(':account_id', $account_id_param, PDO::PARAM_INT);
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        $posts = [];
+
+        foreach ($data as $row) {
+          array_push($posts, new Post($row['id'], $row['title'], $row['image_url'], $row['description'], $row['likes'], $row['liked'], $row['created_at'], json_decode(stripslashes($row['comments'])), new User($row['id'], $row['username'])));
+        }
+
+        return $posts;
+      }
      }
 ?>

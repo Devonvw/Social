@@ -1,38 +1,16 @@
+<?php 
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] !== true){
+    header("location: /");
+    exit;
+}
+?>
 <html>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-window.onload = getFeed();
+window.onload = getMyPosts();
 
-function likeUnlikePost(postId) {
-    fetch(`${window.location.origin}/api/feed/like-unlike-post`, {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({
-            post_id: postId?.id,
-        })
-    }).then(async (res) => {
-        getFeed();
-    }).catch((res) => console.log("error", res));
-}
-
-function deletePost(postId) {
-    fetch(`${window.location.origin}/api/feed`, {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        method: "DELETE",
-        body: JSON.stringify({
-            post_id: postId?.id,
-        })
-    }).then(async (res) => {
-        getFeed();
-    }).catch((res) => console.log("error", res));
-}
-
-function getFeed() {
-    fetch(`${window.location.origin}/api/feed`, {
+function getMyPosts() {
+    fetch(`${window.location.origin}/api/user/my-posts`, {
         headers: {
             'Content-Type': 'application/json'
         },
@@ -44,8 +22,12 @@ function getFeed() {
             var feedHTML = "";
 
             data?.forEach((post => feedHTML += `<div class="bg-teal-600/20 rounded-lg overflow-hidden relative mb-12 shadow-md">
-                    <div class="absolute top-0 left-0 w-full p-2 pb-4 bg-gradient-to-b from-gray-800 to-transparent">
+                    <div class="absolute top-0 left-0 w-full p-2 pb-4 bg-gradient-to-b from-gray-800 to-transparent flex justify-between">
                         <h2 class="text-white font-extrabold text-2xl">${post.user.username}</h2>
+                        <a href="/edit-post?id=${post.id}"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600/80 hover:scale-110 cursor-pointer">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+</svg></a>
+
                     </div>
                     <img class="h-80 w-full object-center object-cover bg-white" src="${post.image_url}">
                     </img>
@@ -99,30 +81,10 @@ function getFeed() {
         }
     }).catch((res) => console.log("error", res));
 }
-
-function addComment(postId) {
-    fetch(`${window.location.origin}/api/feed/add-comment`, {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({
-            comment: document.getElementById(`comment${postId?.id}`).value,
-            post_id: postId?.id,
-        })
-    }).then(async (res) => {
-        getFeed();
-    }).catch((res) => console.log("error", res));
-}
 </script>
 
-<head>
-    <link rel="stylesheet" href="../../styles/globals.css">
-    <link />
-</head>
-
 <body>
-    <div class="min-h-screen">
+    <div class="">
         <?php include __DIR__ . '/../../components/nav.php' ?>
         <div class="flex justify-center mt-32">
             <div class="w-full px-2 sm:max-w-4xl sm:columns-2 gap-8 mb-10" id="posts">

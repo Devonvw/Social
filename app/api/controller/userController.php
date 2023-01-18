@@ -30,5 +30,10 @@ class APIUserController
     {
         $this->userService->LogoutUser();
     }
+
+    public function getMyPosts()
+    {
+        echo json_encode($this->userService->GetMyPosts());
+    }
 }
 ?>

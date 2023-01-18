@@ -16,6 +16,10 @@ class UserController extends Controller {
 
     public function signUp() {
       $this->displayView("");
-  }
+    }
+
+    public function myPosts() {
+        $this->displayView("");
+      }
 }
 ?>

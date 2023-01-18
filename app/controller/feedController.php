@@ -23,6 +23,10 @@ class FeedController extends Controller {
 
     public function newPost() {
       $this->displayView("");
-  }
+    }
+
+    public function editPost() {
+        $this->displayView("");
+    }
 }
 ?>
