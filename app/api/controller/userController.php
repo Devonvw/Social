@@ -15,7 +15,7 @@ class APIUserController
     {
         $body = json_decode(file_get_contents('php://input'), true);
 
-        $this->userService->LoginUser($body["username"], $body["password"]);
+        $this->userService->loginUser($body["username"], $body["password"]);
         return json_encode($_SESSION);
     }
 
@@ -23,17 +23,17 @@ class APIUserController
     {
         $body = json_decode(file_get_contents('php://input'), true);
 
-        $this->userService->CreateUser($body["username"], $body["password"]);
+        $this->userService->createUser($body["username"], $body["password"]);
     }
 
     public function logout()
     {
-        $this->userService->LogoutUser();
+        $this->userService->logoutUser();
     }
 
     public function getMyPosts()
     {
-        echo json_encode($this->userService->GetMyPosts());
+        echo json_encode($this->userService->getMyPosts());
     }
 }
 ?>

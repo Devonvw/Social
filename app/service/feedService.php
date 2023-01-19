@@ -2,70 +2,70 @@
 require __DIR__ . '/../DAL/FeedDAO.php';
 
 class FeedService {
-    public function GetFeed() {
+    public function getFeed() {
         try {
             $dao = new FeedDAO();
-            return $dao->GetFeed();
+            return $dao->getFeed();
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
-    public function GetPost($post_id) {
+    public function getPost($post_id) {
         try {
             $dao = new FeedDAO();
-            return $dao->GetPost($post_id);
+            return $dao->getPost($post_id);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
-    public function CreateNewPost($title, $imgUrl, $description) {
+    public function createNewPost($title, $imgUrl, $description) {
         try {
             $dao = new FeedDAO();
-            $dao->CreateNewPost($title, $imgUrl, $description);
+            $dao->createNewPost($title, $imgUrl, $description);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
-    public function EditPost($post_id, $title, $imgUrl, $description) {
+    public function editPost($post_id, $title, $imgUrl, $description) {
         try {
             $dao = new FeedDAO();
-            return $dao->EditPost($post_id, $title, $imgUrl, $description);
+            return $dao->editPost($post_id, $title, $imgUrl, $description);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
-    public function DeletePost($post_id) {
+    public function deletePost($post_id) {
         try {
             $dao = new FeedDAO();
-            $dao->DeletePost($post_id);
+            $dao->deletePost($post_id);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
-    public function LikeUnlikePost($postId) {
+    public function likeUnlikePost($postId) {
         try {
             $dao = new FeedDAO();
-            $dao->LikeUnlikePost($postId);
+            $dao->likeUnlikePost($postId);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
-    public function AddComment($comment, $postId) {
+    public function addComment($comment, $postId) {
         try {
             $dao = new FeedDAO();
-            $dao->AddComment($comment, $postId);
+            $dao->addComment($comment, $postId);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");

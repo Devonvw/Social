@@ -10,13 +10,13 @@ require_once __DIR__ . '/../DAL/Database.php';
          $this->DB = new DB();
        }
 
-       function LogoutUser() {
+       function logoutUser() {
           if (isset($_SESSION["loggedin"])){
             session_destroy();
           }
        }
 
-       function LoginUser($username, $password) {
+       function loginUser($username, $password) {
         if(empty(trim($username))){
             throw new Exception("Please enter a username.", 1);
         }
@@ -42,7 +42,7 @@ require_once __DIR__ . '/../DAL/Database.php';
         } else throw new Exception("Password is not correct", 1);
        }
 
-       function CreateUser($username, $password) {
+       function createUser($username, $password) {
         if(empty(trim($username))){
             throw new Exception("Please enter a username", 1);
         } 
@@ -79,7 +79,7 @@ require_once __DIR__ . '/../DAL/Database.php';
         }
        }
 
-       function GetMyPosts() {
+       function getMyPosts() {
         $stmt = $this->DB::$connection->prepare("SELECT posts.*, users.id as user_id, users.username, counter.likes, CASE WHEN post_likes_account.post_id THEN true else false END as liked, pco.comments FROM posts left join users on users.id = posts.account_id left join (SELECT * FROM post_likes WHERE account_id = :account_id) as post_likes_account on post_likes_account.post_id = posts.id left join (SELECT COUNT(post_id) as likes, post_id FROM post_likes GROUP BY post_id) as counter on counter.post_id = posts.id left join (select posts.id, replace(replace(JSON_ARRAYAGG(create_objects.object), '}\"', '}'), '\"{', '{') as comments from posts left join (select post_id, JSON_MERGE(JSON_OBJECTAGG('username', users.username), JSON_OBJECTAGG('comment', post_comment.comment)) as object from post_comment left join users on users.id = post_comment.account_id group by post_comment.id) as create_objects on posts.id = create_objects.post_id group by posts.id) as pco on pco.id = posts.id where users.id = :account_id ORDER BY posts.created_at DESC;");
         $account_id_param = isset($_SESSION["id"]) ? $_SESSION["id"] : 0;
 

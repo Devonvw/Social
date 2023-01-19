@@ -2,10 +2,10 @@
 require_once __DIR__ . '/../DAL/UserDAO.php';
 
 class UserService {
-    public function LogoutUser() {
+    public function logoutUser() {
         try {
             $dao = new UserDAO();
-            $dao->LogoutUser();
+            $dao->logoutUser();
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");
@@ -13,10 +13,10 @@ class UserService {
         }
     }
 
-    public function LoginUser($username, $password) {
+    public function loginUser($username, $password) {
         try {
             $dao = new UserDAO();
-            $dao->LoginUser($username, $password);
+            $dao->loginUser($username, $password);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");
@@ -24,10 +24,10 @@ class UserService {
         }
     }
 
-    public function CreateUser($username, $password) {
+    public function createUser($username, $password) {
         try {
             $dao = new UserDAO();
-            $dao->CreateUser($username, $password);
+            $dao->createUser($username, $password);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");
@@ -35,10 +35,10 @@ class UserService {
         }
     }
 
-    public function GetMyPosts() {
+    public function getMyPosts() {
         try {
             $dao = new UserDAO();
-            return $dao->GetMyPosts();
+            return $dao->getMyPosts();
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");

@@ -13,25 +13,25 @@ class APIFeedController
 
     public function getFeed()
     {
-        echo json_encode($this->feedService->GetFeed());
+        echo json_encode($this->feedService->getFeed());
     }
     public function getPost($post_id)
     {
-        echo json_encode($this->feedService->GetPost($post_id));
+        echo json_encode($this->feedService->getPost($post_id));
     }
     public function createNewPost()
     {
         $body = json_decode(file_get_contents('php://input'), true);
-        $this->feedService->CreateNewPost($body["title"], $body["image_url"], $body["description"]);
+        $this->feedService->createNewPost($body["title"], $body["image_url"], $body["description"]);
     }
     public function editPost()
     {
         $body = json_decode(file_get_contents('php://input'), true);
-        $this->feedService->EditPost($body["post_id"], $body["title"], $body["image_url"], $body["description"]);
+        $this->feedService->editPost($body["post_id"], $body["title"], $body["image_url"], $body["description"]);
     }
     public function deletePost($post_id)
     {
-        $this->feedService->DeletePost($post_id);
+        $this->feedService->deletePost($post_id);
     }
     public function likeUnlikePost()
     {
