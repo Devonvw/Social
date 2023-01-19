@@ -42,10 +42,10 @@ class FeedService {
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
-    public function DeletePost($id) {
+    public function DeletePost($post_id) {
         try {
             $dao = new FeedDAO();
-            $dao->DeletePost($id);
+            $dao->DeletePost($post_id);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");

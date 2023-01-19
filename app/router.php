@@ -6,7 +6,7 @@ class Router {
             $uri = substr($uri, 4);
             $api = true;
         }
-        
+
         //Separate api routes and site routes
         if ($api) $this->handleApiRoutes($uri, $params, $requestMethod);
         else $this->handleRoutes($uri, $requestMethod);
@@ -92,13 +92,13 @@ class Router {
                         break;
                 }
                 break;
-            case `DELETE`:
+            case "DELETE":
                 switch($uri) {
                     case "feed":
                         session_start();
                         require_once __DIR__ . '/api/controller/feedController.php';
                         $controller = new APIFeedController();
-                        $controller->deletePost();
+                        $controller->deletePost($params["id"]);
                         break;
                     default:
                         http_response_code(404);

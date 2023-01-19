@@ -106,12 +106,12 @@ require_once __DIR__ . '/../DAL/Database.php';
           $stmt->execute();
         }
 
-        function DeletePost($id) {
-          if (!$id) throw new Exception("Choose a post", 1);
+        function DeletePost($post_id) {
+          if (!$post_id) throw new Exception("Choose a post", 1);
           if (!isset($_SESSION["id"])) throw new Exception("Not logged in", 1);
 
           $select_stmt = $this->DB::$connection->prepare("SELECT * FROM posts WHERE id = :id LIMIT 1");
-          $select_stmt->bindValue(':id', $id, PDO::PARAM_INT);
+          $select_stmt->bindValue(':id', $post_id, PDO::PARAM_INT);
 
           $select_stmt->execute();
           $post = $select_stmt->fetch();
@@ -126,15 +126,15 @@ require_once __DIR__ . '/../DAL/Database.php';
 
           //Delete all rows associated with this post
           $del_stmt = $this->DB::$connection->prepare("DELETE FROM post_likes where post_id = :post_id");
-          $del_stmt->bindValue(':id', $id, PDO::PARAM_INT);
+          $del_stmt->bindValue(':post_id', $post_id, PDO::PARAM_INT);
           $del_stmt->execute();
 
           $del_stmt = $this->DB::$connection->prepare("DELETE FROM post_comment where post_id = :post_id");
-          $del_stmt->bindValue(':id', $id, PDO::PARAM_INT);
+          $del_stmt->bindValue(':post_id', $post_id, PDO::PARAM_INT);
           $del_stmt->execute();
 
-          $del_stmt = $this->DB::$connection->prepare("DELETE FROM post where id = :id");
-          $del_stmt->bindValue(':id', $id, PDO::PARAM_INT);
+          $del_stmt = $this->DB::$connection->prepare("DELETE FROM posts where id = :id");
+          $del_stmt->bindValue(':id', $post_id, PDO::PARAM_INT);
           $del_stmt->execute();
         }
 
