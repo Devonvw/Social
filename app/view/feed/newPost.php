@@ -7,24 +7,40 @@ if(!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true)){
 <html>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-function createNewPost() {
+// When the DOM is loaded:
+window.addEventListener("DOMContentLoaded", function() {
+
+    // Get references to the DOM elements you will need:
+    var frm = document.getElementById("createForm");
+
+    // Don't set variables to the values of DOM elements,
+    // set them to the DOM elements themselves so you can
+    // go back and get whatever properties you like without
+    // having to scan the DOM for them again
+
+
+    // Set up a submit event handler for the form
+    frm.addEventListener("submit", createNewPost);
+});
+
+function createNewPost(e) {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("title", document.getElementById('title').value);
+    formData.append("image", document.getElementById('image').files[0]);
+    formData.append("description", document.getElementById('description').value);
+
     fetch(`${window.location.origin}/api/feed`, {
-        headers: {
-            'Content-Type': 'application/json'
-        },
         method: "POST",
-        body: JSON.stringify({
-            title: document.getElementById('title').value,
-            image_url: document.getElementById('imgUrl').value,
-            description: document.getElementById('description').value
-        })
+        body: formData
     }).then(async (res) => {
-        if (res.ok) {
-            window.location = "/";
-        } else {
-            document.getElementById('error').innerHTML = res.statusText;
-            document.getElementById('errorWrapper').classList.remove('hidden');
-        }
+        //if (res.ok) {
+        //    window.location = "/";
+        //} else {
+        document.getElementById('error').innerHTML = res.statusText;
+        document.getElementById('errorWrapper').classList.remove('hidden');
+        //}
     }).catch((res) => {
         console.log("faulty");
         console.log("error", res);
@@ -71,32 +87,33 @@ function createNewPost() {
                             </svg>
                             <p id="error"></p>
                         </div>
-                        <div>
-                            <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                Title</label>
-                            <input maxlength="255" type="text" name="title" id="title"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Title..." required="">
-                        </div>
-                        <div>
-                            <label for="imgUrl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                Image url</label>
-                            <input type="text" name="imgUrl" id="imgUrl"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Image url..." required="">
-                        </div>
-                        <div>
-                            <label for="description"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                Description</label>
-                            <textarea id="description" rows="4" maxlength="500"
-                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Description..."></textarea>
-                        </div>
-                        <button type="button" onclick="createNewPost()"
-                            class="border border-white w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
-                            post
-                        </button>
+                        <form id="createForm" enctype=”multipart/form-data” class="space-y-4 md:space-y-6">
+                            <div>
+                                <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Title</label>
+                                <input maxlength="255" type="text" name="title" id="title"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Title..." required="">
+                            </div>
+                            <div>
+                                <label for="image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Image url</label>
+                                <input type="file" name="image" id="image"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Image url..." required="">
+                            </div>
+                            <div>
+                                <label for="description"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Description</label>
+                                <textarea id="description" rows="4" maxlength="500"
+                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Description..."></textarea>
+                            </div>
+                            <input type="submit"
+                                class="border border-white w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                            </input>
+                        </form>
                     </div>
                 </div>
             </div>

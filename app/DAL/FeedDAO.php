@@ -22,7 +22,7 @@ require_once __DIR__ . '/../DAL/Database.php';
           $posts = [];
 
           foreach ($data as $row) {
-            array_push($posts, new Post($row['id'], $row['title'], $row['image_url'], $row['description'], $row['likes'], $row['liked'], $row['created_at'], json_decode(stripslashes($row['comments'])), new User($row['id'], $row['username'])));
+            array_push($posts, new Post($row['id'], $row['title'], $row['image_type'], base64_encode($row['image_data']), $row['description'], $row['likes'], $row['liked'], $row['created_at'], json_decode(stripslashes($row['comments'])), new User($row['id'], $row['username'])));
           }
 
           return $posts;
@@ -42,40 +42,44 @@ require_once __DIR__ . '/../DAL/Database.php';
             throw new Exception("This post doesn't exist", 1);
           } 
 
-          return new Post($data['id'], $data['title'], $data['image_url'], $data['description'], null, null, null, null, new User($data['id'], $data['username']));
+          return new Post($data['id'], $data['title'], $data['image_type'], base64_encode($data['image_data']), $data['description'], null, null, null, null, new User($data['id'], $data['username']));
         }
 
-       function createNewPost($title, $imgUrl, $description) {
+       function createNewPost($title, $image, $description) {
           session_start();
 
           if (!isset($_SESSION["id"])) throw new Exception("Not logged in", 1);
 
           if (empty(trim($title))) throw new Exception("Please enter a title", 1);
-          if (empty(trim($imgUrl))) throw new Exception("Please enter an image url", 1);
           if (empty(trim($description))) throw new Exception("Please enter a description", 1);
+          if (empty($image)) throw new Exception("Please enter an image url", 1);
 
-          $stmt = $this->DB::$connection->prepare("INSERT INTO posts (title, image_url, description, account_id) VALUES (:title, :image_url, :description, :account_id)");
+          if (!is_uploaded_file($image['tmp_name'])) return;
+
+          $img_data = file_get_contents($image['tmp_name']);
+          $img_type = $image['type'];
+          
+          $stmt = $this->DB::$connection->prepare("INSERT INTO posts (title, image_type, image_data, description, account_id) VALUES (:title, :image_type, :image_data, :description, :account_id)");
           
           $title_param = trim(htmlspecialchars($title));
-          $image_url_param = trim(htmlspecialchars($imgUrl));
           $description_param = trim(htmlspecialchars($description));
           $account_id_param = trim(htmlspecialchars($_SESSION["id"]));
 
           $stmt->bindValue(':title', $title_param, PDO::PARAM_STR);
-          $stmt->bindValue(':image_url', $image_url_param, PDO::PARAM_STR);
+          $stmt->bindValue(':image_data', $img_data);
+          $stmt->bindValue(':image_type', $img_type);
           $stmt->bindValue(':description', $description_param, PDO::PARAM_STR);
           $stmt->bindValue(':account_id', $account_id_param, PDO::PARAM_INT);
           $stmt->execute();
         }
 
-        function editPost($post_id, $title, $imgUrl, $description) {
+        function editPost($post_id, $title, $image, $description) {
           session_start();
 
           if (!isset($_SESSION["id"])) throw new Exception("Not logged in", 1);
 
           if (!$post_id) throw new Exception("Please choose a post", 1);
           if (empty(trim($title))) throw new Exception("Please enter a title", 1);
-          if (empty(trim($imgUrl))) throw new Exception("Please enter an image url", 1);
           if (empty(trim($description))) throw new Exception("Please enter a description", 1);
 
           $select_stmt = $this->DB::$connection->prepare("SELECT * FROM posts WHERE id = :id LIMIT 1");
@@ -92,15 +96,22 @@ require_once __DIR__ . '/../DAL/Database.php';
             throw new Exception("This is not your post", 1);
           } 
 
-          $stmt = $this->DB::$connection->prepare("UPDATE posts SET title = :title, image_url = :image_url, description = :description where id = :post_id");
+          $stmt = $image ? $this->DB::$connection->prepare("UPDATE posts SET title = :title, image_type = :image_type, image_data = :image_data, description = :description where id = :post_id") : $this->DB::$connection->prepare("UPDATE posts SET title = :title, description = :description where id = :post_id");
           
           $title_param = trim(htmlspecialchars($title));
-          $image_url_param = trim(htmlspecialchars($imgUrl));
           $description_param = trim(htmlspecialchars($description));
-          $account_id_param = trim(htmlspecialchars($_SESSION["id"]));
+
+          if ($image) {
+            if (!is_uploaded_file($image['tmp_name'])) return;
+
+            $img_data = file_get_contents($image['tmp_name']);
+            $img_type = $image['type'];
+
+            $stmt->bindValue(':image_data', $img_data);
+            $stmt->bindValue(':image_type', $img_type);
+          }
 
           $stmt->bindValue(':title', $title_param, PDO::PARAM_STR);
-          $stmt->bindValue(':image_url', $image_url_param, PDO::PARAM_STR);
           $stmt->bindValue(':description', $description_param, PDO::PARAM_STR);
           $stmt->bindValue(':post_id', $post_id, PDO::PARAM_INT);
           $stmt->execute();

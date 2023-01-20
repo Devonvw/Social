@@ -90,7 +90,7 @@ require_once __DIR__ . '/../DAL/Database.php';
         $posts = [];
 
         foreach ($data as $row) {
-          array_push($posts, new Post($row['id'], $row['title'], $row['image_url'], $row['description'], $row['likes'], $row['liked'], $row['created_at'], json_decode(stripslashes($row['comments'])), new User($row['id'], $row['username'])));
+          array_push($posts, new Post($row['id'], $row['title'], $row['image_type'], base64_encode($row['image_data']), $row['description'], $row['likes'], $row['liked'], $row['created_at'], json_decode(stripslashes($row['comments'])), new User($row['id'], $row['username'])));
         }
 
         return $posts;

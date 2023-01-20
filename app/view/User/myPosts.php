@@ -47,7 +47,7 @@ function getMyPosts() {
 </svg></button></div>
 
                     </div>
-                    <img class="h-80 w-full object-center object-cover bg-white" src="${post.image_url}">
+                    <img class="h-80 w-full object-center object-cover bg-white" src="${`data:${post.image_type};base64, ${post.image_data}`}">
                     </img>
                     <div class="relative">
                         <div class="p-4">

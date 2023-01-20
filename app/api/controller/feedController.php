@@ -21,13 +21,12 @@ class APIFeedController
     }
     public function createNewPost()
     {
-        $body = json_decode(file_get_contents('php://input'), true);
-        $this->feedService->createNewPost($body["title"], $body["image_url"], $body["description"]);
+        $this->feedService->createNewPost($_POST["title"], $_FILES["image"], $_POST["description"]);
     }
     public function editPost()
     {
-        $body = json_decode(file_get_contents('php://input'), true);
-        $this->feedService->editPost($body["post_id"], $body["title"], $body["image_url"], $body["description"]);
+        $image = $_FILES ? ($_FILES["image"]["size"] ? $_FILES["image"] : false) : false;
+        $this->feedService->editPost($_POST["post_id"], $_POST["title"], $image, $_POST["description"]);
     }
     public function deletePost($post_id)
     {

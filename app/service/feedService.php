@@ -22,10 +22,10 @@ class FeedService {
             else echo header("HTTP/1.1 500 ".$ex->getMessage());
         }
     }
-    public function createNewPost($title, $imgUrl, $description) {
+    public function createNewPost($title, $image, $description) {
         try {
             $dao = new FeedDAO();
-            $dao->createNewPost($title, $imgUrl, $description);
+            $dao->createNewPost($title, $image, $description);
         } catch (Exception $ex){
             if($ex->getCode() == 0) 
                 echo header("HTTP/1.1 500 Something went wrong.");

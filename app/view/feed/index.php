@@ -40,14 +40,14 @@ function getFeed() {
     }).then(async (res) => {
         if (res.ok) {
             const data = await res.json();
-
+            console.log(data)
             var feedHTML = "";
 
             data?.forEach((post => feedHTML += `<div class="bg-teal-600/20 rounded-lg overflow-hidden relative mb-12 shadow-md">
                     <div class="absolute top-0 left-0 w-full p-2 pb-4 bg-gradient-to-b from-gray-800 to-transparent">
                         <h2 class="text-white font-extrabold text-2xl">${post.user.username}</h2>
                     </div>
-                    <img class="h-80 w-full object-center object-cover bg-white" src="${post.image_url}">
+                    <img class="h-80 w-full object-center object-cover bg-white" src="${`data:${post.image_type};base64, ${post.image_data}`}">
                     </img>
                     <div class="relative">
                         <div class="p-4">

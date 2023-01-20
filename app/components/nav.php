@@ -69,8 +69,8 @@ async function logout() {
             </button>
             <?php endif; ?>
         </div>
-        <button id="burger"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="cursor-pointer h-10 w-10 md:hidden top-1/4 text-teal-800">
+        <button id="burger" class=" md:hidden"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor" class="cursor-pointer h-10 w-10 top-1/4 text-teal-800">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg></button>
     </div>
