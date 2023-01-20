@@ -52,9 +52,9 @@ require_once __DIR__ . '/../DAL/Database.php';
 
           if (empty(trim($title))) throw new Exception("Please enter a title", 1);
           if (empty(trim($description))) throw new Exception("Please enter a description", 1);
-          if (empty($image)) throw new Exception("Please enter an image url", 1);
-
-          if (!is_uploaded_file($image['tmp_name'])) return;
+          if (!$image) throw new Exception("Please enter an image url", 1);
+          if ($image["size"] == 0) throw new Exception("This image is bigger than 2MB", 1);
+          if (!is_uploaded_file($image['tmp_name'])) throw new Exception("This is not the uploaded file", 1);
 
           $img_data = file_get_contents($image['tmp_name']);
           $img_type = $image['type'];
@@ -81,6 +81,10 @@ require_once __DIR__ . '/../DAL/Database.php';
           if (!$post_id) throw new Exception("Please choose a post", 1);
           if (empty(trim($title))) throw new Exception("Please enter a title", 1);
           if (empty(trim($description))) throw new Exception("Please enter a description", 1);
+          if ($image) {
+            if ($image["size"] == 0) throw new Exception("This image is bigger than 2MB", 1);
+            if (!is_uploaded_file($image['tmp_name'])) throw new Exception("This is not the uploaded file", 1);
+          }
 
           $select_stmt = $this->DB::$connection->prepare("SELECT * FROM posts WHERE id = :id LIMIT 1");
           $select_stmt->bindValue(':id', $post_id, PDO::PARAM_INT);
@@ -102,8 +106,6 @@ require_once __DIR__ . '/../DAL/Database.php';
           $description_param = trim(htmlspecialchars($description));
 
           if ($image) {
-            if (!is_uploaded_file($image['tmp_name'])) return;
-
             $img_data = file_get_contents($image['tmp_name']);
             $img_type = $image['type'];
 

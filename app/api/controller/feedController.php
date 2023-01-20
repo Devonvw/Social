@@ -21,11 +21,12 @@ class APIFeedController
     }
     public function createNewPost()
     {
-        $this->feedService->createNewPost($_POST["title"], $_FILES["image"], $_POST["description"]);
+        $image = $_FILES ? ($_FILES["image"]["name"] ? $_FILES["image"] : false) : false;
+        $this->feedService->createNewPost($_POST["title"], $image, $_POST["description"]);
     }
     public function editPost()
     {
-        $image = $_FILES ? ($_FILES["image"]["size"] ? $_FILES["image"] : false) : false;
+        $image = $_FILES ? ($_FILES["image"]["name"] ? $_FILES["image"] : false) : false;
         $this->feedService->editPost($_POST["post_id"], $_POST["title"], $image, $_POST["description"]);
     }
     public function deletePost($post_id)

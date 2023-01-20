@@ -7,9 +7,8 @@ class UserService {
             $dao = new UserDAO();
             $dao->logoutUser();
         } catch (Exception $ex){
-            if($ex->getCode() == 0) 
-                echo header("HTTP/1.1 500 Something went wrong.");
-            else echo header("HTTP/1.1 500 ".$ex->getMessage());
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
         }
     }
 
@@ -18,9 +17,8 @@ class UserService {
             $dao = new UserDAO();
             $dao->loginUser($username, $password);
         } catch (Exception $ex){
-            if($ex->getCode() == 0) 
-                echo header("HTTP/1.1 500 Something went wrong.");
-            else echo header("HTTP/1.1 500 ".$ex->getMessage());
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
         }
     }
 
@@ -29,9 +27,8 @@ class UserService {
             $dao = new UserDAO();
             $dao->createUser($username, $password);
         } catch (Exception $ex){
-            if($ex->getCode() == 0) 
-                echo header("HTTP/1.1 500 Something went wrong.");
-            else echo header("HTTP/1.1 500 ".$ex->getMessage());
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
         }
     }
 
@@ -40,9 +37,8 @@ class UserService {
             $dao = new UserDAO();
             return $dao->getMyPosts();
         } catch (Exception $ex){
-            if($ex->getCode() == 0) 
-                echo header("HTTP/1.1 500 Something went wrong.");
-            else echo header("HTTP/1.1 500 ".$ex->getMessage());
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
         }
     }
 }

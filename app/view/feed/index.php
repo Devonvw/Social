@@ -40,7 +40,7 @@ function getFeed() {
     }).then(async (res) => {
         if (res.ok) {
             const data = await res.json();
-            console.log(data)
+
             var feedHTML = "";
 
             data?.forEach((post => feedHTML += `<div class="bg-teal-600/20 rounded-lg overflow-hidden relative mb-12 shadow-md">

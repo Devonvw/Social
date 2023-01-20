@@ -16,9 +16,6 @@ function deletePost(id) {
     }).then(async (res) => {
         if (res.ok) {
             getMyPosts();
-        } else {
-            document.getElementById('error').innerHTML = res.statusText;
-            document.getElementById('errorWrapper').classList.remove('hidden');
         }
     }).catch((res) => {
         console.log("faulty");

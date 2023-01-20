@@ -35,12 +35,12 @@ function createNewPost(e) {
         method: "POST",
         body: formData
     }).then(async (res) => {
-        //if (res.ok) {
-        //    window.location = "/";
-        //} else {
-        document.getElementById('error').innerHTML = res.statusText;
-        document.getElementById('errorWrapper').classList.remove('hidden');
-        //}
+        if (res.ok) {
+            window.location = "/";
+        } else {
+            document.getElementById('error').innerHTML = (await res.json())?.msg;
+            document.getElementById('errorWrapper').classList.remove('hidden');
+        }
     }).catch((res) => {
         console.log("faulty");
         console.log("error", res);
@@ -97,10 +97,11 @@ function createNewPost(e) {
                             </div>
                             <div>
                                 <label for="image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Image url</label>
+                                    Image</label>
                                 <input type="file" name="image" id="image"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Image url..." required="">
+                                    class="mb-0.5 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Image..." required="">
+                                <span class="text-white text-xs">*Max 2MB</span>
                             </div>
                             <div>
                                 <label for="description"

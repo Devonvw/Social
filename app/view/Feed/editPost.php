@@ -14,7 +14,6 @@ window.addEventListener("DOMContentLoaded", function() {
     frm.addEventListener("submit", editPost);
 });
 
-
 function getPost() {
     const params = new URLSearchParams(window.location.search)
     fetch(`${window.location.origin}/api/feed/post?id=${params.get("id")}`, {
@@ -51,9 +50,9 @@ function editPost(e) {
         body: formData
     }).then(async (res) => {
         if (res.ok) {
-            //window.location = "/my-posts";
+            window.location = "/my-posts";
         } else {
-            document.getElementById('error').innerHTML = res.statusText;
+            document.getElementById('error').innerHTML = (await res.json())?.msg;
             document.getElementById('errorWrapper').classList.remove('hidden');
         }
     }).catch((res) => {
@@ -114,8 +113,9 @@ function editPost(e) {
                                 <label for="image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Image</label>
                                 <input type="file" name="image" id="image"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Image url...">
+                                    class="mb-0.5 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Image...">
+                                <span class="text-white text-xs">*Max 2MB</span>
                             </div>
                             <img id="oldImage" class="h-24 w-full object-center object-cover bg-white rounded-lg">
                             </img>

@@ -21,7 +21,7 @@ function signUp() {
         if (res.ok) {
             window.location = "/login";
         } else {
-            document.getElementById('error').innerHTML = res.statusText;
+            document.getElementById('error').innerHTML = (await res.json())?.msg;
             document.getElementById('errorWrapper').classList.remove('hidden');
         }
     }).then((res) => {}).catch((res) => {
