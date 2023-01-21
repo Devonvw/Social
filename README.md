@@ -1,11 +1,17 @@
-# Docker template for PHP projects
-This repository provides a starting template for PHP application development.
+# Social
+An assignment for the web development 1 course of the Informatics course at the Inholland University of Applied Sciences in Haarlem
 
 It contains:
 * NGINX webserver
 * PHP FastCGI Process Manager with PDO MySQL support
 * MariaDB (GPL MySQL fork)
 * PHPMyAdmin
+
+## Production
+https://socialdevon.000webhostapp.com/
+
+## Login
+Username: Geert, Password: wachtwoord
 
 ## Installation
 
