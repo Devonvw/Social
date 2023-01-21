@@ -25,10 +25,7 @@ function login() {
             document.getElementById('error').innerHTML = (await res.json())?.msg;
             document.getElementById('errorWrapper').classList.remove('hidden');
         }
-    }).then((res) => {}).catch((res) => {
-        console.log("faulty");
-        console.log("error", res);
-    });
+    }).then((res) => {}).catch((res) => {});
 }
 </script>
 <header>

@@ -29,10 +29,7 @@ function getPost() {
         document.getElementById('title').value = post?.title;
         document.getElementById('oldImage').src = `data:${post.image_type};base64, ${post.image_data}`
         document.getElementById('description').value = post?.description;
-    }).catch((res) => {
-        console.log("faulty");
-        console.log("error", res);
-    })
+    }).catch((res) => {})
 }
 
 function editPost(e) {
@@ -55,10 +52,7 @@ function editPost(e) {
             document.getElementById('error').innerHTML = (await res.json())?.msg;
             document.getElementById('errorWrapper').classList.remove('hidden');
         }
-    }).catch((res) => {
-        console.log("faulty");
-        console.log("error", res);
-    })
+    }).catch((res) => {})
 }
 </script>
 <header>

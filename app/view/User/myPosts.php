@@ -11,16 +11,14 @@ window.onload = getMyPosts();
 
 function deletePost(id) {
     if (!confirm("Are you sure you want to delete this post?")) return;
+
     fetch(`${window.location.origin}/api/feed?id=${id}`, {
         method: "DELETE",
     }).then(async (res) => {
         if (res.ok) {
             getMyPosts();
         }
-    }).catch((res) => {
-        console.log("faulty");
-        console.log("error", res);
-    })
+    }).catch((res) => {})
 }
 
 function getMyPosts() {
@@ -48,7 +46,7 @@ function getMyPosts() {
                     </img>
                     <div class="relative">
                         <div class="p-4">
-                            <div class="flex items-center justify-center absolute top-2 right-2">
+                            <div class="flex items-center justify-center absolute top-4 right-4">
                                 <p class="text-teal-800 mr-1">${post.likes}</p><svg
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor"
@@ -65,7 +63,7 @@ function getMyPosts() {
                             <h6 class="text-base font-semibold">
                                 ${post.comments[0] ? post.comments.length : 0} comments
                             </h6>
-                            <div class=" max-h-20 overflow-y-auto">
+                            <div class="max-h-[4.75rem] overflow-y-auto">
                                 ${post.comments[0] ? `<div class="mt-1">
                                     ${post.comments?.map((comment) => 
                                         `<div class="flex gap-x-2">
@@ -77,13 +75,13 @@ function getMyPosts() {
                         </div>
 
                         <p class="border-t border-gray-400 text-xs px-4 py-1">
-                            ${new Date(post.created_at).toLocaleDateString()}</p>
+                            ${new Date(post.created_at).toLocaleString()}</p>
                     </div>
                 </div>`))
 
             document.getElementById("posts").innerHTML = feedHTML;
         }
-    }).catch((res) => console.log("error", res));
+    }).catch((res) => {});
 }
 </script>
 <header>
@@ -109,7 +107,7 @@ function getMyPosts() {
     <div class="">
         <?php include __DIR__ . '/../../components/nav.php' ?>
         <div class="flex justify-center mt-32">
-            <div class="w-full px-2 sm:max-w-4xl sm:columns-2 gap-8 mb-10" id="posts">
+            <div class="w-full px-2 sm:max-w-xl gap-4 mb-10" id="posts">
                 <!-- Posts -->
             </div>
         </div>

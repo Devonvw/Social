@@ -18,15 +18,15 @@ window.onload = () => {
     })
 }
 
-
 async function logout() {
-    await fetch('http://localhost/api/user/logout', {
+    await fetch(`${window.location.origin}/api/user/logout`, {
         method: "POST",
     }).then((res) => {
-        window.location.href = "http://localhost";
-    }).catch((res) => console.log(res));
+        window.location.href = "/";
+    }).catch((res) => {});
 }
 </script>
+
 <nav class="fixed top-0 w-full z-50" style="backdrop-filter: blur(20px);">
     <div class="flex flex-row justify-between px-4 py-6">
         <a href="/">
@@ -91,7 +91,7 @@ async function logout() {
             <?php if (!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"])) : ?><a href="/login"
                 class="bg-teal-800 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden font-medium text-gray-900 rounded-lg group dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
                 <span
-                    class="text-teal-800 group-hover:text-white uppercase font-bold relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-teal-800">
+                    class="w-full text-center text-teal-800 group-hover:text-white uppercase font-bold relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-teal-800">
                     Login
                 </span>
             </a><a href="/sign-up"
@@ -118,13 +118,13 @@ async function logout() {
             <button type="button" name="logoutBtn" onclick="logout()"
                 class="bg-teal-800 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden font-medium text-gray-900 rounded-lg group dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
                 <span
-                    class="text-white group-hover:text-teal-800 uppercase font-bold relative x-5 py-2.5 transition-all ease-in duration-75 bg-teal-800 rounded-md group-hover:bg-white">
+                    class="w-full text-white group-hover:text-teal-800 uppercase font-bold relative x-5 py-2.5 transition-all ease-in duration-75 bg-teal-800 rounded-md group-hover:bg-white">
                     Logout
                 </span>
             </button>
             <?php endif; ?>
         </div>
-        <div class="text-white font-chivo text-[13px] mt-8">
+        <div class="text-teal-800 font-chivo text-[13px] mt-8">
             ©Social 2023
         </div>
     </div>

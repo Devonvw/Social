@@ -13,27 +13,47 @@ class APIUserController
 
     public function login()
     {
-        $body = json_decode(file_get_contents('php://input'), true);
+        try {
+            $body = json_decode(file_get_contents('php://input'), true);
 
-        $this->userService->loginUser($body["username"], $body["password"]);
-        return json_encode($_SESSION);
+            $this->userService->loginUser($body["username"], $body["password"]);
+            return json_encode($_SESSION);
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
 
     public function createUser()
     {
-        $body = json_decode(file_get_contents('php://input'), true);
+        try {
+            $body = json_decode(file_get_contents('php://input'), true);
 
-        $this->userService->createUser($body["username"], $body["password"]);
+            $this->userService->createUser($body["username"], $body["password"]);
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
 
     public function logout()
     {
-        $this->userService->logoutUser();
+        try {
+            $this->userService->logoutUser();
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
 
     public function getMyPosts()
     {
-        echo json_encode($this->userService->getMyPosts());
+        try {
+            echo json_encode($this->userService->getMyPosts());
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
 }
 ?>

@@ -7,19 +7,9 @@ if(!(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true)){
 <html>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-// When the DOM is loaded:
 window.addEventListener("DOMContentLoaded", function() {
-
-    // Get references to the DOM elements you will need:
     var frm = document.getElementById("createForm");
 
-    // Don't set variables to the values of DOM elements,
-    // set them to the DOM elements themselves so you can
-    // go back and get whatever properties you like without
-    // having to scan the DOM for them again
-
-
-    // Set up a submit event handler for the form
     frm.addEventListener("submit", createNewPost);
 });
 
@@ -41,10 +31,7 @@ function createNewPost(e) {
             document.getElementById('error').innerHTML = (await res.json())?.msg;
             document.getElementById('errorWrapper').classList.remove('hidden');
         }
-    }).catch((res) => {
-        console.log("faulty");
-        console.log("error", res);
-    })
+    }).catch((res) => {})
 }
 </script>
 <header>
@@ -111,9 +98,10 @@ function createNewPost(e) {
                                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Description..."></textarea>
                             </div>
-                            <input type="submit"
+                            <button type="submit"
                                 class="border border-white w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            </input>
+                                Create Post
+                            </button>
                         </form>
                     </div>
                 </div>

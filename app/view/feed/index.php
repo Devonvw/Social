@@ -4,6 +4,13 @@
 window.onload = getFeed();
 
 function likeUnlikePost(postId) {
+    const loggedIn = "<?php echo isset($_SESSION["loggedin"]); ?>"
+
+    if (!loggedIn) {
+        alert("Login or signup to like this post.");
+        return;
+    }
+
     fetch(`${window.location.origin}/api/feed/like-unlike-post`, {
         headers: {
             'Content-Type': 'application/json'
@@ -14,21 +21,7 @@ function likeUnlikePost(postId) {
         })
     }).then(async (res) => {
         getFeed();
-    }).catch((res) => console.log("error", res));
-}
-
-function deletePost(postId) {
-    fetch(`${window.location.origin}/api/feed`, {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        method: "DELETE",
-        body: JSON.stringify({
-            post_id: postId?.id,
-        })
-    }).then(async (res) => {
-        getFeed();
-    }).catch((res) => console.log("error", res));
+    }).catch((res) => {});
 }
 
 function getFeed() {
@@ -41,6 +34,12 @@ function getFeed() {
         if (res.ok) {
             const data = await res.json();
 
+            var loggedIn = false;
+            try {
+                loggedIn = "<?php echo isset($_SESSION["loggedin"]); ?>"
+            } catch (e) {}
+            console.log(loggedIn ? "ja" : "nee");
+
             var feedHTML = "";
 
             data?.forEach((post => feedHTML += `<div class="bg-teal-600/20 rounded-lg overflow-hidden relative mb-12 shadow-md">
@@ -51,7 +50,7 @@ function getFeed() {
                     </img>
                     <div class="relative">
                         <div class="p-4">
-                            <div class="flex items-center justify-center absolute top-2 right-2">
+                            <div class="flex items-center justify-center absolute top-4 right-4">
                                 <p class="text-teal-800 mr-1">${post.likes}</p><button id="${post.id}"
                                     class="w-6 h-6 " onclick="likeUnlikePost(this)"><svg
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -67,9 +66,9 @@ function getFeed() {
                         </div>
                         <div class="border-t border-gray-400 px-4 py-1 text-sm">
                             <h6 class="text-base font-semibold">
-                                ${post.comments[0] ? post.comments.length : 0} comments
+                                ${post.comments[0] ? post.comments.length : 0} comment(s)
                             </h6>
-                            <div class=" max-h-20 overflow-y-auto">
+                            <div class="max-h-[4.75rem] overflow-y-auto">
                                 ${post.comments[0] ? `<div class="mt-1">
                                     ${post.comments?.map((comment) => 
                                         `<div class="flex gap-x-2">
@@ -84,23 +83,32 @@ function getFeed() {
                                     placeholder="Comment....." required=""><button id="${post.id}"
                                     class="w-6 h-6 " onclick="addComment(this)"><svg xmlns="http://www.w3.org/2000/svg"
                                         fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                        class="w-6 h-6">
+                                        class="w-6 h-6 hover:fill-teal-800">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                                     </svg></button></div>
                         </div>
 
                         <p class="border-t border-gray-400 text-xs px-4 py-1">
-                            ${new Date(post.created_at).toLocaleDateString()}</p>
+                            ${new Date(post.created_at).toLocaleString()}</p>
                     </div>
                 </div>`))
 
             document.getElementById("posts").innerHTML = feedHTML;
         }
-    }).catch((res) => console.log("error", res));
+    }).catch((res) => {});
 }
 
 function addComment(postId) {
+    const loggedIn = "<?php echo isset($_SESSION["loggedin"]); ?>"
+
+    if (!loggedIn) {
+        alert("Login or signup to comment on this post.");
+        return;
+    }
+
+    if (!document.getElementById(`comment${postId?.id}`).value) return;
+
     fetch(`${window.location.origin}/api/feed/add-comment`, {
         headers: {
             'Content-Type': 'application/json'
@@ -112,7 +120,7 @@ function addComment(postId) {
         })
     }).then(async (res) => {
         getFeed();
-    }).catch((res) => console.log("error", res));
+    }).catch((res) => {});
 }
 </script>
 <header>
@@ -143,7 +151,7 @@ function addComment(postId) {
     <div class="min-h-screen">
         <?php include __DIR__ . '/../../components/nav.php' ?>
         <div class="flex justify-center mt-32">
-            <div class="w-full px-2 sm:max-w-4xl sm:columns-2 gap-8 mb-10" id="posts">
+            <div class="w-full px-2 sm:max-w-xl flex flex-col gap-4 mb-10" id="posts">
                 <!-- Posts -->
             </div>
         </div>

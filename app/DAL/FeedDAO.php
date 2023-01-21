@@ -3,7 +3,6 @@ require __DIR__ . '/../model/Post.php';
 require __DIR__ . '/../model/User.php';
 require_once __DIR__ . '/../DAL/Database.php';
 
-
     class FeedDAO {
        public $DB;
        
@@ -12,7 +11,7 @@ require_once __DIR__ . '/../DAL/Database.php';
        }
 
        function getFeed() {
-          $stmt = $this->DB::$connection->prepare("SELECT posts.*, users.id as user_id, users.username, counter.likes, CASE WHEN post_likes_account.post_id THEN true else false END as liked, pco.comments FROM posts left join users on users.id = posts.account_id left join (SELECT * FROM post_likes WHERE account_id = :account_id) as post_likes_account on post_likes_account.post_id = posts.id left join (SELECT COUNT(post_id) as likes, post_id FROM post_likes GROUP BY post_id) as counter on counter.post_id = posts.id left join (select posts.id, replace(replace(JSON_ARRAYAGG(create_objects.object), '}\"', '}'), '\"{', '{') as comments from posts left join (select post_id, JSON_MERGE(JSON_OBJECTAGG('username', users.username), JSON_OBJECTAGG('comment', post_comment.comment)) as object from post_comment left join users on users.id = post_comment.account_id group by post_comment.id) as create_objects on posts.id = create_objects.post_id group by posts.id) as pco on pco.id = posts.id ORDER BY posts.created_at DESC;");
+          $stmt = $this->DB::$connection->prepare("SELECT posts.*, users.id as user_id, users.username, counter.likes, CASE WHEN post_likes_account.post_id THEN true else false END as liked, pco.comments FROM posts left join users on users.id = posts.account_id left join (SELECT * FROM post_likes WHERE account_id = :account_id) as post_likes_account on post_likes_account.post_id = posts.id left join (SELECT COUNT(post_id) as likes, post_id FROM post_likes GROUP BY post_id) as counter on counter.post_id = posts.id left join (select posts.id, replace(replace(JSON_ARRAYAGG(create_objects.object), '}\"', '}'), '\"{', '{') as comments from posts left join (select post_id, JSON_MERGE(JSON_OBJECTAGG('username', users.username), JSON_OBJECTAGG('comment', post_comment.comment)) as object from post_comment left join users on users.id = post_comment.account_id group by post_comment.id order by post_comment.created_at desc) as create_objects on posts.id = create_objects.post_id group by posts.id) as pco on pco.id = posts.id ORDER BY posts.created_at DESC;");
           $account_id_param = isset($_SESSION["id"]) ? $_SESSION["id"] : 0;
 
           $stmt->bindValue(':account_id', $account_id_param, PDO::PARAM_INT);

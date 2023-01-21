@@ -13,35 +13,76 @@ class APIFeedController
 
     public function getFeed()
     {
-        echo json_encode($this->feedService->getFeed());
+        try {
+            echo json_encode($this->feedService->getFeed());
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
+    
     public function getPost($post_id)
     {
-        echo json_encode($this->feedService->getPost($post_id));
+        try {
+            echo json_encode($this->feedService->getPost($post_id));
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
+
     public function createNewPost()
     {
-        $image = $_FILES ? ($_FILES["image"]["name"] ? $_FILES["image"] : false) : false;
-        $this->feedService->createNewPost($_POST["title"], $image, $_POST["description"]);
+        try {
+            $image = $_FILES ? ($_FILES["image"]["name"] ? $_FILES["image"] : false) : false;
+            $this->feedService->createNewPost($_POST["title"], $image, $_POST["description"]);
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
+
     public function editPost()
     {
-        $image = $_FILES ? ($_FILES["image"]["name"] ? $_FILES["image"] : false) : false;
-        $this->feedService->editPost($_POST["post_id"], $_POST["title"], $image, $_POST["description"]);
+        try {
+            $image = $_FILES ? ($_FILES["image"]["name"] ? $_FILES["image"] : false) : false;
+            $this->feedService->editPost($_POST["post_id"], $_POST["title"], $image, $_POST["description"]);
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
+
     public function deletePost($post_id)
     {
-        $this->feedService->deletePost($post_id);
+        try {
+            $this->feedService->deletePost($post_id);
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
+
     public function likeUnlikePost()
     {
-        $body = json_decode(file_get_contents('php://input'), true);
-        $this->feedService->likeUnlikePost($body["post_id"]);
+        try {
+            $body = json_decode(file_get_contents('php://input'), true);
+            $this->feedService->likeUnlikePost($body["post_id"]);
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
+
     public function addComment()
     {
-        $body = json_decode(file_get_contents('php://input'), true);
-        $this->feedService->addComment($body["comment"], $body["post_id"]);
+        try {
+            $body = json_decode(file_get_contents('php://input'), true);
+            $this->feedService->addComment($body["comment"], $body["post_id"]);
+        } catch (Exception $ex){
+            http_response_code(500);
+            if($ex->getCode() != 0) echo json_encode([ 'msg' => $ex->getMessage() ]);
+        }
     }
 }
 ?>
