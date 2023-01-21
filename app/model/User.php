@@ -1,7 +1,6 @@
 <?php
 
 class User {
-  // Properties
   public $id;
   public $username;
   public $password;

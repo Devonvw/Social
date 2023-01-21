@@ -1,6 +1,5 @@
 <?php
 class Post {
-  // Properties
   public $id;
   public $title;
   public $image_type;
