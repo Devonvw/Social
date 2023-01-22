@@ -11,7 +11,9 @@ It contains:
 https://socialdevon.000webhostapp.com/
 
 ## Login
-Username: Geert, Password: wachtwoord
+* Username: Geert, Password: wachtwoord
+* Username: Jaap, Password: wachtwoord
+
 
 ## Installation
 
